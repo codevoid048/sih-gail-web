@@ -10,10 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "demo": "file:",
+    "@heroicons/react": "^2.1.5",
+    "@material-tailwind/react": "^2.1.10",
     "axios": "^1.7.7",
+    "demo": "file:",
     "formik": "^2.4.6",
+    "heroicons": "^2.1.5",
     "react": "^18.3.1",
+    "react-apexcharts": "^1.4.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
     "yup": "^1.4.0"
