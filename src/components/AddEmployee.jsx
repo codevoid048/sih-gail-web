@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -32,7 +33,6 @@ const AddEmployee = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      // Create FormData to send file and other data
       const formData = new FormData();
       formData.append('employeeId', values.employeeId);
       formData.append('firstName', values.firstName);
@@ -44,7 +44,6 @@ const AddEmployee = () => {
       formData.append('profilePic', values.profilePic);
 
       try {
-        // Send data to the backend via API
         await axios.post('/api/employees', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
@@ -73,11 +72,8 @@ const AddEmployee = () => {
   >
     <h2 className="text-2xl font-bold mb-6">Create New Employee</h2>
 
-    {/* Flex container for two columns */}
     <div className="flex flex-wrap -mx-2">
-      {/* Column 1 */}
       <div className="w-full md:w-1/2 px-2">
-        {/* Employee ID */}
         <div className="mb-4">
           <label htmlFor="employeeId" className="block text-gray-700">
             Employee ID
@@ -97,7 +93,6 @@ const AddEmployee = () => {
           ) : null}
         </div>
 
-        {/* First Name */}
         <div className="mb-4">
           <label htmlFor="firstName" className="block text-gray-700">
             First Name
@@ -115,7 +110,6 @@ const AddEmployee = () => {
           ) : null}
         </div>
 
-        {/* Last Name */}
         <div className="mb-4">
           <label htmlFor="lastName" className="block text-gray-700">
             Last Name
@@ -133,7 +127,6 @@ const AddEmployee = () => {
           ) : null}
         </div>
 
-        {/* Phone Number */}
         <div className="mb-4">
           <label htmlFor="phoneNum" className="block text-gray-700">
             Phone Number
@@ -152,9 +145,7 @@ const AddEmployee = () => {
         </div>
       </div>
 
-      {/* Column 2 */}
       <div className="w-full md:w-1/2 px-2">
-        {/* Email */}
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700">
             Email
@@ -172,7 +163,6 @@ const AddEmployee = () => {
           ) : null}
         </div>
 
-        {/* Office Address */}
         <div className="mb-4">
           <label htmlFor="officeAddress" className="block text-gray-700">
             Initial Office Address
@@ -192,7 +182,6 @@ const AddEmployee = () => {
           ) : null}
         </div>
 
-        {/* Manager ID */}
         <div className="mb-4">
           <label htmlFor="managerId" className="block text-gray-700">
             Manager ID
@@ -210,7 +199,6 @@ const AddEmployee = () => {
           ) : null}
         </div>
 
-        {/* Profile Picture */}
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">
             Profile Picture
@@ -231,7 +219,6 @@ const AddEmployee = () => {
       </div>
     </div>
 
-    {/* Submit and Cancel Buttons */}
     <div className="flex justify-between">
       <button
         type="button"
