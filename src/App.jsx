@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/secured" element={<ProtectedRoute />}>
           <Route path="home" element={<Home />} />
+          <Route path="Dashboard" element={<Dashboard/>}/>
           </Route>
         </Routes>
     </div>
