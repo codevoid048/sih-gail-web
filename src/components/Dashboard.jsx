@@ -1,9 +1,10 @@
-import React from 'react';
-import { StatisticsChart } from "../components/Statisticcharts";
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-key */
+import { BanknotesIcon, ClockIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { Typography } from "@material-tailwind/react";
-import { ClockIcon } from "@heroicons/react/24/solid";
+import React from 'react';
 import { StatisticsCard } from "../components/Staticcards";
-import { BanknotesIcon, UsersIcon } from "@heroicons/react/24/solid";
+import { StatisticsChart } from "../components/Statisticcharts";
 
 const Dashboard = () => {
   const chartsConfig = {

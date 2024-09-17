@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -82,7 +85,10 @@ const AddEmployee = ({ onCancel }) => {
   const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
+  
+  // useEffect (() => {
+  //   console.log(managers);
+  // }[managers, ]);
   useEffect(() => {
     const fetchManagers = async () => {
       try {
@@ -91,6 +97,7 @@ const AddEmployee = ({ onCancel }) => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log(data);
         setManagers(data); // Adjust if your data structure is different
       } catch (err) {
         setError('Failed to fetch managers');
@@ -128,7 +135,7 @@ const AddEmployee = ({ onCancel }) => {
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('employeeId', values.employeeId);
-      formData.append('name', value.firstName + values.lastName );
+      formData.append('name', value.firstName + values.lastName);
       formData.append('phoneNum', values.phoneNum);
       formData.append('email', values.email);
       formData.append('officeAddress', values.officeAddress);
@@ -136,8 +143,8 @@ const AddEmployee = ({ onCancel }) => {
       formData.append('profilePic', values.profilePic);
 
       try {
-        await axios.post('/api/employees', formData, {
-          headers: { 'Content-Type': 'https://attandance-backend-sih.onrender.com/api/user/createemployee' },
+        await axios.post('https://attandance-backend-sih.onrender.com/api/user/createemployee', formData, {
+          headers: { 'Content-Type': 'multipart/form-data'},
         });
         alert('Employee Created Successfully');
         navigate('/employees');
@@ -146,7 +153,7 @@ const AddEmployee = ({ onCancel }) => {
       }
     },
   });
-
+  
   const handleCancel = () => {
     setCancelPopupVisible(true);
   };
