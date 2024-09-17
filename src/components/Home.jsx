@@ -134,16 +134,16 @@ const AddEmployee = ({ onCancel }) => {
       formData.append('officeAddress', values.officeAddress);
       formData.append('managerId', values.managerId);
       formData.append('profilePic', values.profilePic);
-
+      console.log(formData)
       try {
-        await axios.post('/api/employees', formData, {
-          headers: { 'Content-Type': 'https://attandance-backend-sih.onrender.com/api/user/createemployee' },
-        });
-        alert('Employee Created Successfully');
-        navigate('/employees');
-      } catch (error) {
-        alert('Error creating employee');
-      }
+    await axios.post('https://attandance-backend-sih.onrender.com/api/user/createemployee', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },  // Correct Content-Type for form data
+    });
+    alert('Employee Created Successfully');
+    navigate('/employees');
+} catch (error) {
+    alert('Error creating employee');
+}
     },
   });
 
@@ -289,7 +289,7 @@ const AddEmployee = ({ onCancel }) => {
             id="managerId"
             name="managerId"
             className="w-full px-3 py-2 border-gray border rounded-md bg-white text-black"
-            //onChange ={ e => setManager(e.target.value)}
+            onChange={formik.handleChange}
            // Use Formik's handleChange
             onBlur={formik.handleBlur} // Handle blur for validation
             value={formik.values.managerId} // Ensure value is controlled by Formik
@@ -300,8 +300,8 @@ const AddEmployee = ({ onCancel }) => {
             ) : error ? (
               <option value="" disabled>{error}</option>
             ) : (
-              managers.map((manager) => (
-                <option key={manager.id} value={manager.id}  label={manager.name} />
+              managers?.map((manager) => (
+                <option key={manager.id} value={manager.id} >{manager.name}</option>
               ))
             )}
           </select>
@@ -312,7 +312,7 @@ const AddEmployee = ({ onCancel }) => {
 
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">
-            Profile Picture
+            Profile Picture 
           </label>
           <input
             type="file"
