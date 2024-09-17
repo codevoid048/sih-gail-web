@@ -1,19 +1,38 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 const Employees = ({ onAddEmployee, onViewEmployee }) => {
-  const [employees] = useState([
-    { id: 1, employerId : 1, name: 'John Prakash', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email: 'john@gmail.com', managerID : 1 },
-    { id: 2, employerId : 2, name: 'Praveen', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'praveen@gmail.com', managerID : 1 },
-    { id: 3, employerId : 3, name: 'Vikram', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'vikram@gmail.com', managerID : 2},
-    { id: 4, employerId : 4, name: 'William', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'william@gmail.com', managerID : 3},
-    { id: 5, employerId : 5, name: 'Revathi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'revathi@gmail.com', managerID : 3},
-    { id: 6, employerId : 6, name: 'Jahnavi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'jahnavi@gmail.com', managerID : 1}
+  const [employees, setEmployees] = useState([
+  //   { id: 1, employerId : 1, name: 'John Prakash', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email: 'john@gmail.com', managerID : 1 },
+  //   { id: 2, employerId : 2, name: 'Praveen', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'praveen@gmail.com', managerID : 1 },
+  //   { id: 3, employerId : 3, name: 'Vikram', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'vikram@gmail.com', managerID : 2},
+  //   { id: 4, employerId : 4, name: 'William', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'william@gmail.com', managerID : 3},
+  //   { id: 5, employerId : 5, name: 'Revathi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'revathi@gmail.com', managerID : 3},
+  //   { id: 6, employerId : 6, name: 'Jahnavi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'jahnavi@gmail.com', managerID : 1}
+  // 
   ]);
+  
+  useEffect(() => {
+    const fetchEmployees = async () => {
+  try {
+    const response = await fetch('https://attandance-backend-sih.onrender.com/api/user');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    setEmployees(data); // Adjust if your data structure is different
+  } catch (error) {
+    setError('Failed to fetch managers');
+  } finally {
+    setLoading(false);
+  }
+};
 
+fetchEmployees();
+}, []);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredEmployees = employees.filter(employee =>
@@ -60,6 +79,29 @@ const AddEmployee = ({ onCancel }) => {
   const navigate = useNavigate();
   const [isCancelPopupVisible, setCancelPopupVisible] = useState(false);
 
+  const [managers, setManagers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchManagers = async () => {
+      try {
+        const response = await fetch('https://attandance-backend-sih.onrender.com/api/user/listmanagers');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setManagers(data); // Adjust if your data structure is different
+      } catch (err) {
+        setError('Failed to fetch managers');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchManagers();
+  }, []);
+
   const validationSchema = Yup.object({
     employeeId: Yup.string().required('Employee ID is required'),
     firstName: Yup.string().required('First Name is required'),
@@ -86,8 +128,7 @@ const AddEmployee = ({ onCancel }) => {
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('employeeId', values.employeeId);
-      formData.append('firstName', values.firstName);
-      formData.append('lastName', values.lastName);
+      formData.append('name', value.firstName + values.lastName );
       formData.append('phoneNum', values.phoneNum);
       formData.append('email', values.email);
       formData.append('officeAddress', values.officeAddress);
@@ -96,7 +137,7 @@ const AddEmployee = ({ onCancel }) => {
 
       try {
         await axios.post('/api/employees', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { 'Content-Type': 'https://attandance-backend-sih.onrender.com/api/user/createemployee' },
         });
         alert('Employee Created Successfully');
         navigate('/employees');
@@ -248,15 +289,21 @@ const AddEmployee = ({ onCancel }) => {
             id="managerId"
             name="managerId"
             className="w-full px-3 py-2 border-gray border rounded-md bg-white text-black"
-            onChange={formik.handleChange}
-            value={formik.values.managerId}
+            //onChange ={ e => setManager(e.target.value)}
+           // Use Formik's handleChange
+            onBlur={formik.handleBlur} // Handle blur for validation
+            value={formik.values.managerId} // Ensure value is controlled by Formik
           >
             <option value="" label="Select Manager" />
-            <option value='1' label='1' />
-            <option value='2' label='2' />
-            <option value='3' label='3' />
-            <option value='4' label='4' />
-            <option value='5' label='5' />
+            {loading ? (
+              <option value="" disabled>Loading...</option>
+            ) : error ? (
+              <option value="" disabled>{error}</option>
+            ) : (
+              managers.map((manager) => (
+                <option key={manager.id} value={manager.id}  label={manager.name} />
+              ))
+            )}
           </select>
           {formik.touched.managerId && formik.errors.managerId ? (
             <div className="text-red-500 text-sm">{formik.errors.managerId}</div>
