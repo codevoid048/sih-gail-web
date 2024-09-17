@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom';
 const SecuredNavigation = () => {
   const links = [
     { id: 1, name: 'Dashboard', path: '/secured/Dashboard' },
-    { id: 2, name: 'Employees', path: '/secured/home' }
+    { id: 2, name: 'Employees', path: '/secured/home' },
+    {id:3,name:'Attendance',path:'/secured/Attendance'}
   ];
 
   return (

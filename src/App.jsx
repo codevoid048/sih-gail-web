@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
 import ADashboard from "./components/Manager/ADashboard";
 import Ahome from "./components/Manager/Ahome";
+import Attendance from "./components/Attendance";
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
           <Route path="/secured" element={<ProtectedRoute />}>
           <Route path="home" element={<Home />} />
           <Route path="Dashboard" element={<Dashboard/>}/>
+          <Route path="Attendance" element={<Attendance/>}/>
+
           </Route>
           <Route path="/admin" element={<ProtectedRoute/>}>
           <Route path="ADashboard" element={<ADashboard/>}/>
