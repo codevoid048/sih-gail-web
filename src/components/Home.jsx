@@ -6,12 +6,12 @@ import * as Yup from 'yup';
 
 const Employees = ({ onAddEmployee, onViewEmployee }) => {
   const [employees] = useState([
-    { id: 1, employerId : 1, name: 'John Prakash', role: 'Employee', initialOfficeLocation : 'BVRM',  email: 'john@gmail.com', managerID : 1 },
-    { id: 2, employerId : 2, name: 'Praveen', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'praveen@gmail.com', managerID : 1 },
-    { id: 3, employerId : 3, name: 'Vikram', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'vikram@gmail.com', managerID : 2},
-    { id: 4, employerId : 4, name: 'William', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'william@gmail.com', managerID : 3},
-    { id: 5, employerId : 5, name: 'Revathi', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'revathi@gmail.com', managerId : 3},
-    { id: 6, employerId : 6, name: 'Jahnavi', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'jahnavi@gmail.com', managerID : 1}
+    { id: 1, employerId : 1, name: 'John Prakash', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email: 'john@gmail.com', managerID : 1 },
+    { id: 2, employerId : 2, name: 'Praveen', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'praveen@gmail.com', managerID : 1 },
+    { id: 3, employerId : 3, name: 'Vikram', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'vikram@gmail.com', managerID : 2},
+    { id: 4, employerId : 4, name: 'William', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'william@gmail.com', managerID : 3},
+    { id: 5, employerId : 5, name: 'Revathi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'revathi@gmail.com', managerID : 3},
+    { id: 6, employerId : 6, name: 'Jahnavi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'jahnavi@gmail.com', managerID : 1}
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -218,14 +218,20 @@ const AddEmployee = ({ onCancel }) => {
           <label htmlFor="officeAddress" className="block text-gray-700">
             Initial Office Address
           </label>
-          <input
-            type="text"
+          <select
             id="officeAddress"
             name="officeAddress"
             className="w-full px-3 py-2 border-gray border rounded-md bg-white text-black"
             onChange={formik.handleChange}
             value={formik.values.officeAddress}
-          />
+          >
+            <option value="" label="Select a location" />
+            <option value="BVRM" label="BVRM" />
+            <option value="HYD" label="HYD" />
+            <option value="BLR" label="BLR" />
+            <option value="DEL" label="DEL" />
+            <option value="MUM" label="MUM" />
+          </select>
           {formik.touched.officeAddress && formik.errors.officeAddress ? (
             <div className="text-red-500 text-sm">
               {formik.errors.officeAddress}
@@ -233,18 +239,25 @@ const AddEmployee = ({ onCancel }) => {
           ) : null}
         </div>
 
+
         <div className="mb-4">
           <label htmlFor="managerId" className="block text-gray-700">
             Manager ID
           </label>
-          <input
-            type="text"
+          <select
             id="managerId"
             name="managerId"
             className="w-full px-3 py-2 border-gray border rounded-md bg-white text-black"
             onChange={formik.handleChange}
             value={formik.values.managerId}
-          />
+          >
+            <option value="" label="Select Manager" />
+            <option value='1' label='1' />
+            <option value='2' label='2' />
+            <option value='3' label='3' />
+            <option value='4' label='4' />
+            <option value='5' label='5' />
+          </select>
           {formik.touched.managerId && formik.errors.managerId ? (
             <div className="text-red-500 text-sm">{formik.errors.managerId}</div>
           ) : null}
@@ -317,19 +330,100 @@ const AddEmployee = ({ onCancel }) => {
 
 const ViewEmployee = ({ employee, onCancel }) => {
   return (
-    <div>
-      <h2>Employee Details</h2>
-      <p><strong>Name:</strong> {employee.name}</p>
-      <p><strong>Employee ID:</strong> {employee.employeeId}</p>
-      <p><strong>Phone Number:</strong> {employee.phone}</p>
-      <p><strong>Email:</strong> {employee.email}</p>
-      <p><strong>Office Address:</strong> {employee.officeAddress}</p>
-      <p><strong>Manager ID:</strong> {employee.managerID}</p>
-      <p><strong>Manager Name:</strong> {employee.managerName}</p>
-      <button onClick={onCancel}>Back</button>
+    <div className='flex items-center justify-center w-full h-screen bg-gray-300'>
+      <div className='w-[60%] max-w-md'>
+        <div className='text-black border border-gray-300 rounded-lg p-6 bg-white shadow-lg'>
+          <h2 className='text-2xl font-bold mb-4'>Employee Details</h2>
+          <form className='space-y-4 flex flex-col'>
+            <div>
+              <label htmlFor='name' className='block text-gray-700 font-medium'>Name:</label>
+              <input
+                type='text'
+                id='name'
+                value={employee.name}
+                readOnly
+                className='w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed'
+              />
+            </div>
+
+            <div>
+              <label htmlFor='employeeId' className='block text-gray-700 font-medium'>Employee ID:</label>
+              <input
+                type='text'
+                id='employeeId'
+                value={employee.employerId}
+                readOnly
+                className='w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed'
+              />
+            </div>
+
+            <div>
+              <label htmlFor='phoneNum' className='block text-gray-700 font-medium'>Phone Number:</label>
+              <input
+                type='text'
+                id='phoneNum'
+                value={employee.phoneNum}
+                readOnly
+                className='w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed'
+              />
+            </div>
+
+            <div>
+              <label htmlFor='email' className='block text-gray-700 font-medium'>Email:</label>
+              <input
+                type='email'
+                id='email'
+                value={employee.email}
+                readOnly
+                className='w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed'
+              />
+            </div>
+
+            <div>
+              <label htmlFor='officeAddress' className='block text-gray-700 font-medium'>Office Address:</label>
+              <input
+                type='text'
+                id='officeAddress'
+                value={employee.initialOfficeLocation}
+                readOnly
+                className='w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed'
+              />
+            </div>
+
+            <div>
+              <label htmlFor='managerId' className='block text-gray-700 font-medium'>Manager ID:</label>
+              <input
+                type='text'
+                id='managerId'
+                value={employee.managerID}
+                readOnly
+                className='w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed'
+              />
+            </div>
+
+            <div className='flex justify-between mt-6'>
+              <button
+                type='button'
+                onClick={onCancel}
+                className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-all duration-200'
+              >
+                Back
+              </button>
+              <button
+                type='button'
+                onClick={onCancel}
+                className='bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-all duration-200'
+              >
+                Edit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
+
 const Home = () => {
   const [isAddingEmployee, setIsAddingEmployee] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null); // New state for selected employee
