@@ -4,14 +4,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-const Employees = ({ onAddEmployee }) => {
+const Employees = ({ onAddEmployee, onViewEmployee }) => {
   const [employees] = useState([
-    { id: 1, name: 'John Prakash', role: 'Employee' },
-    { id: 2, name: 'Praveen', role: 'Employee' },
-    { id: 3, name: 'Vikram', role: 'Employee' },
-    { id: 4, name: 'William', role: 'Employee'},
-    { id: 5, name: 'Revathi', role: 'Employee'},
-    { id: 6, name: 'Jahnavi', role: 'Employee'}
+    { id: 1, employerId : 1, name: 'John Prakash', role: 'Employee', initialOfficeLocation : 'BVRM',  email: 'john@gmail.com', managerID : 1 },
+    { id: 2, employerId : 2, name: 'Praveen', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'praveen@gmail.com', managerID : 1 },
+    { id: 3, employerId : 3, name: 'Vikram', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'vikram@gmail.com', managerID : 2},
+    { id: 4, employerId : 4, name: 'William', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'william@gmail.com', managerID : 3},
+    { id: 5, employerId : 5, name: 'Revathi', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'revathi@gmail.com', managerId : 3},
+    { id: 6, employerId : 6, name: 'Jahnavi', role: 'Employee', initialOfficeLocation : 'BVRM', email : 'jahnavi@gmail.com', managerID : 1}
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,6 +43,11 @@ const Employees = ({ onAddEmployee }) => {
               <div className="bg-gray-300 w-16 h-16 rounded-full mb-4"></div>
               <h3 className="text-lg font-semibold text-gray-600">{employee.name}</h3>
               <p className="text-gray-500">{employee.role}</p>
+              <button 
+                className="bg-blue-500 text-white px-4 py-2 mt-2 rounded-md hover:bg-blue-600"
+                onClick={() => onViewEmployee(employee)}>
+                View Details
+              </button>
             </div>
           </div>
         ))}
@@ -310,15 +315,39 @@ const AddEmployee = ({ onCancel }) => {
   );
 };
 
+const ViewEmployee = ({ employee, onCancel }) => {
+  return (
+    <div>
+      <h2>Employee Details</h2>
+      <p><strong>Name:</strong> {employee.name}</p>
+      <p><strong>Employee ID:</strong> {employee.employeeId}</p>
+      <p><strong>Phone Number:</strong> {employee.phone}</p>
+      <p><strong>Email:</strong> {employee.email}</p>
+      <p><strong>Office Address:</strong> {employee.officeAddress}</p>
+      <p><strong>Manager ID:</strong> {employee.managerID}</p>
+      <p><strong>Manager Name:</strong> {employee.managerName}</p>
+      <button onClick={onCancel}>Back</button>
+    </div>
+  );
+};
 const Home = () => {
   const [isAddingEmployee, setIsAddingEmployee] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null); // New state for selected employee
 
   return (
     <div className="p-6">
-      {!isAddingEmployee ? (
-        <Employees onAddEmployee={() => setIsAddingEmployee(true)} />
-      ) : (
+      {!isAddingEmployee && !selectedEmployee ? (
+        <Employees 
+          onAddEmployee={() => setIsAddingEmployee(true)} 
+          onViewEmployee={(employee) => setSelectedEmployee(employee)} // Pass selected employee
+        />
+      ) : isAddingEmployee ? (
         <AddEmployee onCancel={() => setIsAddingEmployee(false)} />
+      ) : (
+        <ViewEmployee 
+          employee={selectedEmployee} 
+          onCancel={() => setSelectedEmployee(null)} // Go back to Employees list
+        />
       )}
     </div>
   );

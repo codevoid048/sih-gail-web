@@ -16,11 +16,31 @@ const Login = () => {
       password: ''
     },
     validationSchema,
-    onSubmit: (values) => {
-      if (values.username === 'admin' && values.password === 'admin') {
-        navigate('/secured/home');
-      } else {
-        alert('Invalid credentials');
+    onSubmit: async (values) => {
+      try {
+        // Make a POST request to the API
+        const response = await fetch('https://attandance-backend-sih.onrender.com/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: values.username,  // Assuming 'email' is used for username in the API
+            password: values.password
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Handle successful login, for example, navigate to home page
+          navigate('/secured/home');
+        } else {
+          // Handle error response
+          alert('Invalid credentials');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        alert('Something went wrong. Please try again later.');
       }
     }
   });
@@ -85,4 +105,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
