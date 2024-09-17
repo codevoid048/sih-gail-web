@@ -19,7 +19,11 @@ const Login = () => {
     onSubmit: (values) => {
       if (values.username === 'admin' && values.password === 'admin') {
         navigate('/secured/home');
-      } else {
+      } 
+      else if(values.username === 'manager' && values.password === 'manager'){
+          navigate('/admin/ahome');
+      }
+      else {
         alert('Invalid credentials');
       }
     }
