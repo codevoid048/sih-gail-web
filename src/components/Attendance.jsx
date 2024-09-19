@@ -15,7 +15,7 @@ const Attendance = () => {
   const attendance = [
     { 
       userName: 'john_doe', 
-      fname: 'John Doe', 
+      fname: 'vikram', 
       imageUrl: null, 
       dates: [1, 2, 3], 
       holidays: [4], 
@@ -23,7 +23,7 @@ const Attendance = () => {
     },
     { 
       userName: 'jane_doe', 
-      fname: 'Jane Doe', 
+      fname: 'Sai Uttej', 
       imageUrl: null, 
       dates: [7, 8, 9], 
       holidays: [10], 

@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
+
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -85,10 +83,7 @@ const AddEmployee = ({ onCancel }) => {
   const [managers, setManagers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
-  // useEffect (() => {
-  //   console.log(managers);
-  // }[managers, ]);
+
   useEffect(() => {
     const fetchManagers = async () => {
       try {
@@ -98,7 +93,7 @@ const AddEmployee = ({ onCancel }) => {
         }
         const data = await response.json();
         console.log(data);
-        setManagers(data); // Adjust if your data structure is different
+        setManagers(data);
       } catch (err) {
         setError('Failed to fetch managers');
       } finally {
@@ -135,22 +130,22 @@ const AddEmployee = ({ onCancel }) => {
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append('employeeId', values.employeeId);
-      formData.append('name', value.firstName + values.lastName);
+      formData.append('name', values.firstName + values.lastName);
       formData.append('phoneNum', values.phoneNum);
       formData.append('email', values.email);
       formData.append('officeAddress', values.officeAddress);
       formData.append('managerId', values.managerId);
       formData.append('profilePic', values.profilePic);
-
+      console.log(formData)
       try {
-        await axios.post('https://attandance-backend-sih.onrender.com/api/user/createemployee', formData, {
-          headers: { 'Content-Type': 'multipart/form-data'},
-        });
-        alert('Employee Created Successfully');
-        navigate('/employees');
-      } catch (error) {
-        alert('Error creating employee');
-      }
+    await axios.post('https://attandance-backend-sih.onrender.com/api/user/createemployee', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },  
+    });
+    alert('Employee Created Successfully');
+    navigate('/employees');
+} catch (error) {
+    alert('Error creating employee');
+}
     },
   });
   
@@ -296,10 +291,9 @@ const AddEmployee = ({ onCancel }) => {
             id="managerId"
             name="managerId"
             className="w-full px-3 py-2 border-gray border rounded-md bg-white text-black"
-            //onChange ={ e => setManager(e.target.value)}
-           // Use Formik's handleChange
-            onBlur={formik.handleBlur} // Handle blur for validation
-            value={formik.values.managerId} // Ensure value is controlled by Formik
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur} 
+            value={formik.values.managerId} 
           >
             <option value="" label="Select Manager" />
             {loading ? (
@@ -307,8 +301,8 @@ const AddEmployee = ({ onCancel }) => {
             ) : error ? (
               <option value="" disabled>{error}</option>
             ) : (
-              managers.map((manager) => (
-                <option key={manager.id} value={manager.id}  label={manager.name} />
+              managers?.map((manager) => (
+                <option key={manager.id} value={manager.id} >{manager.name}</option>
               ))
             )}
           </select>
@@ -319,7 +313,7 @@ const AddEmployee = ({ onCancel }) => {
 
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">
-            Profile Picture
+            Profile Picture 
           </label>
           <input
             type="file"
@@ -487,14 +481,14 @@ const Home = () => {
       {!isAddingEmployee && !selectedEmployee ? (
         <Employees 
           onAddEmployee={() => setIsAddingEmployee(true)} 
-          onViewEmployee={(employee) => setSelectedEmployee(employee)} // Pass selected employee
+          onViewEmployee={(employee) => setSelectedEmployee(employee)} 
         />
       ) : isAddingEmployee ? (
         <AddEmployee onCancel={() => setIsAddingEmployee(false)} />
       ) : (
         <ViewEmployee 
           employee={selectedEmployee} 
-          onCancel={() => setSelectedEmployee(null)} // Go back to Employees list
+          onCancel={() => setSelectedEmployee(null)} 
         />
       )}
     </div>

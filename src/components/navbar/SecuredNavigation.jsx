@@ -4,7 +4,9 @@ const SecuredNavigation = () => {
   const links = [
     { id: 1, name: 'Dashboard', path: '/secured/Dashboard' },
     { id: 2, name: 'Employees', path: '/secured/home' },
-    {id:3,name:'Attendance',path:'/secured/Attendance'}
+    {id:3,name:'Attendance',path:'/secured/Attendance'},
+    {id:4,name:'Worksite',path:'/secured/Worksite'}
+
   ];
 
   return (
