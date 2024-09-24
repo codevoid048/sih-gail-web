@@ -1,11 +1,12 @@
 import { Route, Routes } from "react-router-dom";
+import Attendance from "./components/Attendance";
+import Dashboard from "./components/Dashboard";
+import EmployeeLocations from "./components/EmployeeLocations";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Dashboard from "./components/Dashboard";
 import ADashboard from "./components/Manager/ADashboard";
 import Ahome from "./components/Manager/Ahome";
-import Attendance from "./components/Attendance";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Worksite from "./Worksite";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="Dashboard" element={<Dashboard/>}/>
           <Route path="Attendance" element={<Attendance/>}/>
           <Route path="Worksite" element={<Worksite/>}/>
+          <Route path="EmployeeLocations" element={<EmployeeLocations/>}/>
 
 
           </Route>
