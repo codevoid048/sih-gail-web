@@ -29,7 +29,7 @@ const Employees = ({ onAddEmployee, onViewEmployee }) => {
 //     const data = await response.json();
 //     setEmployees(data); // Adjust if your data structure is different
 //   } catch (error) {
-//     setError('Failed to fetch managers');
+//     setError('Failed to fetch Employees');
 //   } finally {
 //     setLoading(false);
 //   }

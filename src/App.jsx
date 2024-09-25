@@ -29,12 +29,7 @@ function App() {
         <Route path="/" element={<Login />} />
 
         {/* Protected routes for secured user */}
-        <Route
-          path="/secured/*"
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated()} role={getUserRole()} />
-          }
-        >
+        <Route path="/secured/*" element={<ProtectedRoute isAuthenticated={isAuthenticated()} role={getUserRole()} />}>
           <Route path="home" element={<Home />} />
           <Route path="Dashboard" element={<Dashboard />} />
           <Route path="Attendance" element={<Attendance />} />
@@ -44,12 +39,7 @@ function App() {
         </Route>
 
         {/* Protected routes for admin */}
-        <Route
-          path="/admin/*"
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated()} role={getUserRole()} />
-          }
-        >
+        <Route path="/admin/*" element={<ProtectedRoute isAuthenticated={isAuthenticated()} role={getUserRole()} />}>
           <Route path="ADashboard" element={<ADashboard />} />
           <Route path="Ahome" element={<Ahome />} />
         </Route>

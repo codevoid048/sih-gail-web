@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { Button, Form, Modal, Table } from 'react-bootstrap';
-import Pagination from 'react-js-pagination';
+import { Button, Form, Table } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Attendance = () => {
   const [search, setSearch] = useState("");
   const [checkSearch, setCheckSearch] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isDelete, setIsDelete] = useState(false);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [formFieldsDates, setFormFieldsDates] = useState({ startDate: "", endDate: "" });
   const [isSubmitted, setIsSubmitted] = useState(false);
   
@@ -15,7 +16,7 @@ const Attendance = () => {
   const monthDates = Array.from({ length: 30 }, (_, i) => i + 1); // Days 1 to 30
   const attendance = [
     { 
-      userName: 'john_doe', 
+      userName: 'Vikram', 
       fname: 'vikram', 
       imageUrl: null, 
       dates: [1, 2, 3], 
@@ -23,39 +24,48 @@ const Attendance = () => {
       weekEnds: [5, 6] 
     },
     { 
-      userName: 'jane_doe', 
-      fname: 'Sai Uttej', 
+      userName: 'John', 
+      fname: 'John', 
       imageUrl: null, 
       dates: [7, 8, 9], 
       holidays: [10], 
       weekEnds: [11, 12] 
+    },
+    { 
+      userName: 'Liam', 
+      fname: 'Will', 
+      imageUrl: null, 
+      dates: [9, 16, 22], 
+      holidays: [1, 10, 25], 
+      weekEnds: [7, 14, 21, 28] 
     }
   ];
-  const userNames = ['john_doe']; // For checkbox selection
   const totalRecordsInEmp = 2;
   const totalPages = 1;
 
-  // Handlers (Dummy)
-  const handleKeyPress = () => {
-    console.log('Search Key Pressed');
-  };
-  const handleSearch = () => {
-    console.log('Search Clicked');
-  };
-  const handleCheckboxChange = () => {
-    console.log('Checkbox Changed');
+  const closeOverlay = () => {
+    setIsOverlayOpen(false);
   };
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };  
+  const filteredAttendance = attendance.filter(emp =>
+    emp.fname.toLowerCase().includes(search.toLowerCase()) || emp.userName.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleKeyPress = () => {
+    console.log('Search Key Pressed');
   };
-  const closeModal = () => {
-    setIsDelete(false);
+
+  const handleSearch = () => {
+    console.log('Search Clicked');
+    toast.success("Search executed successfully!");
   };
   const downloadData = (dates) => {
     console.log("Downloading data for date range:", dates);
+    closeOverlay(); // Close overlay after download
   };
   const datesVal = (dates, day, holidays, weekends) => {
-    // Dummy logic to render cells based on the day
     if (holidays.includes(day)) return <td className="text-red-500">A</td>;
     if (weekends.includes(day)) return <td className="text-gray-500">W</td>;
     if (dates.includes(day)) return <td className="text-green-500">P</td>;
@@ -63,89 +73,96 @@ const Attendance = () => {
   };
 
   return (
-    <div className = 'p-6'>
+    <div className='p-6'>
+      <ToastContainer />
+      <div className="attendtopsearch bg-white p-4 flex flex-wrap items-center justify-between w-full rounded-lg shadow-md mb-4">
+        <div className="flex items-center w-full md:w-auto mb-4 md:mb-0">
+          <input
+            type="text"
+            id="attendSearch"
+            className="rounded-lg h-10 w-full md:w-80 px-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Search By Employee"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCheckSearch(true);
+            }}
+            onKeyUp={handleKeyPress}
+          />
+        </div>
 
-      <div className="attendtopsearch bg-white p-2 flex justify-between pr-20 w-full rounded-lg">
-        <input
-          type="text"
-          id="attendSearch"
-          className="rounded-md h-8 w-[319px] ml-8"
-          placeholder="Search By Employee"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setCheckSearch(true);
-          }}
-          onKeyUp={handleKeyPress}
-        />
+        {/* Month Picker */}
+        <div className="flex items-center w-full md:w-auto mb-4 md:mb-0">
+          <input
+            type="month"
+            onChange={(e) => {
+              if (e.target.value) {
+                const [year, month] = e.target.value.split("-");
+                setSearch("");
+                console.log("Search Month:", month, "Search Year:", year);
+              }
+            }}
+            className="rounded-lg h-10 w-full md:w-80 px-4 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
 
-        <input
-          type="month"
-          onChange={(e) => {
-            if (e.target.value) {
-              const [year, month] = e.target.value.split("-");
-              setSearch("");
-              // Assuming there's a function to handle setting month/year
-              console.log("Search Month:", month, "Search Year:", year);
-            }
-          }}
-          className="MonthInAttendance w-[319px]"
-        />
+        {/* Search Button */}
+        <div className="flex items-center w-full md:w-auto mb-4 md:mb-0">
+          <input
+            type="button"
+            id="attendsearchbtn"
+            className="bg-red-500 hover:bg-red-600 text-white rounded-full h-10 w-36 font-light cursor-pointer transition-colors duration-300"
+            value="Search"
+            onClick={handleSearch}
+          />
+        </div>
 
-        <input
-          type="button"
-          id="attendsearchbtn"
-          className="relative top-0 left-8 bg-red-600 text-black rounded-full h-8 w-36 font-light cursor-pointer text-[15px]"
-          value="Search"
-          onClick={handleSearch}
-        />
-
-        <input
-          type="button"
-          id="attendsearchbtn"
-          className="bg-green-600 text-black rounded-full h-8 w-36 font-light cursor-pointer text-[15px] ml-4"
-          value="Export"
-          onClick={() => setIsDelete(true)}
-        />
+        {/* Export Button */}
+        <div className="flex items-center w-full md:w-auto">
+          <input
+            type="button"
+            id="attendexportbtn"
+            className="bg-green-500 hover:bg-green-600 text-white rounded-full h-10 w-36 font-light cursor-pointer transition-colors duration-300"
+            value="Export"
+            onClick={() => setIsOverlayOpen(true)} // Open modal
+          />
+        </div>
       </div>
 
       {/* Table Section */}
-      <div className="attendDivision bg-white relative rounded-lg mt-2 h-[70vh]">
-        <Table striped bordered hover className="tableinAttendance w-screen">
+      <div className="attendDivision bg-gray-100 p-4 rounded-lg h-screen overflow-auto">
+        <Table className="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
           <thead>
-            <tr className="tableheader text-black">
-              <th>Employee Name</th>
+            <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+              <th className="p-3 text-left">Employee Name</th>
               {monthDates?.map((d, index) => (
-                <th key={index}>{d}</th>
+                <th key={index} className="p-3 text-center">{d}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {attendance?.length === 0 ? (
-              <div className="absolute top-[35vh] left-[60vh] text-lg font-bold text-black">
-                No User Found
-              </div>
+            {filteredAttendance.length === 0 ? (
+              <tr>
+                <td colSpan={monthDates.length + 1} className="text-center p-6 text-gray-500">
+                  No User Found
+                </td>
+              </tr>
             ) : (
-              attendance.map((item, i) => (
-                <tr key={i}>
-                  <td className="wrapInAttendance flex max-w-[800px] text-black">
-                    {/* <input
-                      type="checkbox"
-                      name={item.userNa me}
-                      checked={userNames.includes(item.userName)}
-                      onChange={handleCheckboxChange}
-                      className="m-0 w-auto"
-                    /> */}
+              filteredAttendance.map((item, i) => (
+                <tr key={i} className="border-b border-gray-200 hover:bg-gray-100">
+                  <td className="p-3 flex items-center">
                     <img
                       src={item.imageUrl || 'https://via.placeholder.com/25'}
                       alt="profile"
-                      className="w-6 h-6 rounded-full mr-4"
+                      className="w-8 h-8 rounded-full mr-3"
                     />
-                    <div>{item.fname}</div>
+                    <span className="font-medium text-gray-700">{item.fname}</span>
                   </td>
-                  {monthDates?.map((d) =>
-                    datesVal(item.dates, d, item.holidays, item.weekEnds)
-                  )}
+                  {monthDates?.map((d, index) => (
+                    <td key={index} className="p-3 text-center">
+                      {datesVal(item.dates, d, item.holidays, item.weekEnds)}
+                    </td>
+                  ))}
                 </tr>
               ))
             )}
@@ -153,71 +170,36 @@ const Attendance = () => {
         </Table>
       </div>
 
-      {/* Pagination Section */}
-      <div className="paginationInAttendance">
-        <Pagination
-          itemClass="page-item"
-          linkClass="page-link"
-          activePage={currentPage}
-          itemsCountPerPage={15}
-          totalItemsCount={totalRecordsInEmp}
-          pageRangeDisplayed={totalPages}
-          onChange={handlePageChange}
-        />
-      </div>
-
       {/* Modal Section */}
-      <Modal show={isDelete} onHide={closeModal}>
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          <h5 className="text-center">Select Date Range</h5>
-          <Form className="flex justify-around">
-            <div className="attendanceFormControl">
-              <span className="font-bold">
-                Start Date <span className="text-red-600">*</span> :
-              </span>
-              <Form.Control
-                type="date"
-                className="w-auto h-auto p-1"
-                isInvalid={isSubmitted && !formFieldsDates.startDate}
-                onChange={(e) =>
-                  setFormFieldsDates({
-                    ...formFieldsDates,
-                    startDate: e.target.value,
-                    endDate: "",
-                  })
-                }
-              />
-            </div>
-
-            <div className="attendanceFormControl">
-              <span className="font-bold">
-                End Date <span className="text-red-600">*</span> :
-              </span>
-              <Form.Control
-                type="date"
-                className="w-auto h-auto p-1"
-                min={formFieldsDates.startDate}
-                isInvalid={isSubmitted && !formFieldsDates.endDate}
-                onChange={(e) =>
-                  setFormFieldsDates({
-                    ...formFieldsDates,
-                    endDate: e.target.value,
-                  })
-                }
-              />
-            </div>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-end">
-          <Button variant="secondary" onClick={closeModal} className="ml-2">
-            Cancel
-          </Button>
-          <Button variant="secondary" onClick={() => downloadData(formFieldsDates)} className="ml-2">
-            Download
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {isOverlayOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 w-96">
+            <h2 className="text-lg font-bold mb-4 text-black">Select Date Range</h2>
+            <Form className="flex flex-col">
+              <div className="mb-4">
+                <label className="font-bold text-black">Start Date:</label>
+                <Form.Control
+                  type="date"
+                  className="w-full rounded-md"
+                  onChange={(e) => setFormFieldsDates({ ...formFieldsDates, startDate: e.target.value })}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="font-bold text-black">End Date:</label>
+                <Form.Control
+                  type="date"
+                  className="w-full rounded-md"
+                  onChange={(e) => setFormFieldsDates({ ...formFieldsDates, endDate: e.target.value })}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button variant="secondary" onClick={closeOverlay} className="mr-2">Cancel</Button>
+                <Button variant="primary" onClick={() => downloadData(formFieldsDates)}>Download</Button>
+              </div>
+            </Form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

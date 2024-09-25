@@ -8,7 +8,7 @@ const SecuredNavigation = () => {
     { id: 3, name: 'Attendance', path:'/secured/Attendance'},
     { id: 4, name: 'Worksite', path:'/secured/Worksite'},
     { id: 5, name: 'EmployeeLocations', path: '/secured/EmployeeLocations' },
-    { id: 4, name: 'Logout', path:'/secured/Logout'}
+    { id: 6, name: 'Logout', path:'/secured/Logout'}
   ];
 
   return (
