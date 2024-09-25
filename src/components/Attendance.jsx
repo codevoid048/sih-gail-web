@@ -63,7 +63,7 @@ const Attendance = () => {
   };
   const downloadData = (dates) => {
     console.log("Downloading data for date range:", dates);
-    closeOverlay(); // Close overlay after download
+    closeOverlay(); 
   };
   const datesVal = (dates, day, holidays, weekends) => {
     if (holidays.includes(day)) return <td className="text-red-500">A</td>;

@@ -14,7 +14,7 @@ const SecuredNavigation = () => {
   return (
     <div className="bg-gradient-to-b from-gray-800 to-gray-900 h-screen w-60 text-white shadow-lg">
       <div className="flex flex-col py-6 space-y-4">
-        <h1 className="text-center text-2xl font-bold mb-6">Admin Panel</h1>
+        <h1 className="text-center text-2xl font-bold mb-6">Manager Panel</h1>
         {
           links.map(link => (
             <NavLink

@@ -55,6 +55,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-gray-300">
+      
       <div className="flex w-3/4 h-4/5 shadow-lg rounded-lg border-2 border-gray-400 overflow-hidden">
         <div className="w-2/3 border-r border-gray-400">
           <img
