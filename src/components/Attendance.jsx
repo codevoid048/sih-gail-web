@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { Table, Form, Button, Modal } from 'react-bootstrap';
+import { Button, Form, Modal, Table } from 'react-bootstrap';
 import Pagination from 'react-js-pagination';
 
 const Attendance = () => {
@@ -62,15 +63,8 @@ const Attendance = () => {
   };
 
   return (
-    <div>
-      {/* Dashboard Location */}
-      <div id="dashboardlocation" className="flex flex-row justify-between relative -top-1 w-1/5">
-        <span className="text-black text-[13px]">
-          Dashboard &gt; Attendance
-        </span>
-      </div>
+    <div className = 'p-6'>
 
-      {/* Search Section */}
       <div className="attendtopsearch bg-white p-2 flex justify-between pr-20 w-full rounded-lg">
         <input
           type="text"
@@ -135,13 +129,13 @@ const Attendance = () => {
               attendance.map((item, i) => (
                 <tr key={i}>
                   <td className="wrapInAttendance flex max-w-[800px] text-black">
-                    <input
+                    {/* <input
                       type="checkbox"
-                      name={item.userName}
+                      name={item.userNa me}
                       checked={userNames.includes(item.userName)}
                       onChange={handleCheckboxChange}
                       className="m-0 w-auto"
-                    />
+                    /> */}
                     <img
                       src={item.imageUrl || 'https://via.placeholder.com/25'}
                       alt="profile"

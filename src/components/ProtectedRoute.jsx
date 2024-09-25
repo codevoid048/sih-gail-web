@@ -1,11 +1,19 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import SecuredNavigation from './navbar/SecuredNavigation';
 import ManagerNavigation from './navbar/ManagerNavigation';
+import SecuredNavigation from './navbar/SecuredNavigation';
 
 const ProtectedRoute = () => {
-  const isManager = true;
-  const isAdmin = true;
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+  const role = localStorage.getItem('role');
+  const isManager = role === 'manager';
+  const isAdmin = role === 'admin';
+
+  if (!isLoggedIn) {
+    return <Navigate to="/" />;
+  }
 
   if (isAdmin) {
     return (

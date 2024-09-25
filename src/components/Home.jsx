@@ -1,39 +1,42 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 const Employees = ({ onAddEmployee, onViewEmployee }) => {
   const [employees, setEmployees] = useState([
-  //   { id: 1, employerId : 1, name: 'John Prakash', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email: 'john@gmail.com', managerID : 1 },
-  //   { id: 2, employerId : 2, name: 'Praveen', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'praveen@gmail.com', managerID : 1 },
-  //   { id: 3, employerId : 3, name: 'Vikram', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'vikram@gmail.com', managerID : 2},
-  //   { id: 4, employerId : 4, name: 'William', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'william@gmail.com', managerID : 3},
-  //   { id: 5, employerId : 5, name: 'Revathi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'revathi@gmail.com', managerID : 3},
-  //   { id: 6, employerId : 6, name: 'Jahnavi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'jahnavi@gmail.com', managerID : 1}
-  // 
+    { id: 1, employerId : 1, name: 'John Prakash', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email: 'john@gmail.com', managerID : 1 },
+    { id: 2, employerId : 2, name: 'Praveen', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'praveen@gmail.com', managerID : 1 },
+    { id: 3, employerId : 3, name: 'Vikram', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'vikram@gmail.com', managerID : 2},
+    { id: 4, employerId : 4, name: 'William', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'william@gmail.com', managerID : 3},
+    { id: 5, employerId : 5, name: 'Revathi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'revathi@gmail.com', managerID : 3},
+    { id: 6, employerId : 6, name: 'Jahnavi', role: 'Employee', initialOfficeLocation : 'BVRM', phoneNum : '9999999999', email : 'jahnavi@gmail.com', managerID : 1}
+  
   ]);
   
-  useEffect(() => {
-    const fetchEmployees = async () => {
-  try {
-    const response = await fetch('https://attandance-backend-sih.onrender.com/api/user');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    setEmployees(data); // Adjust if your data structure is different
-  } catch (error) {
-    setError('Failed to fetch managers');
-  } finally {
-    setLoading(false);
-  }
-};
+//   useEffect(() => {
+//     const fetchEmployees = async () => {
+//   try {
+//     const response = await fetch('https://attandance-backend-sih.onrender.com/api/user');
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok');
+//     }
+//     const data = await response.json();
+//     setEmployees(data); // Adjust if your data structure is different
+//   } catch (error) {
+//     setError('Failed to fetch managers');
+//   } finally {
+//     setLoading(false);
+//   }
+// };
 
-fetchEmployees();
-}, []);
+// fetchEmployees();
+// }, []);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredEmployees = employees.filter(employee =>
@@ -79,30 +82,32 @@ fetchEmployees();
 const AddEmployee = ({ onCancel }) => {
   const navigate = useNavigate();
   const [isCancelPopupVisible, setCancelPopupVisible] = useState(false);
+  const manager = localStorage.getItem('managerName');
+  //const managerID = localStorage.getItem('managerID');
 
-  const [managers, setManagers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  // const [managers, setManagers] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchManagers = async () => {
-      try {
-        const response = await fetch('https://attandance-backend-sih.onrender.com/api/user/listmanagers');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log(data);
-        setManagers(data);
-      } catch (err) {
-        setError('Failed to fetch managers');
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchManagers = async () => {
+  //     try {
+  //       const response = await fetch('https://attandance-backend-sih.onrender.com/api/user/listmanagers');
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       const data = await response.json();
+  //       console.log(data);
+  //       setManagers(data);
+  //     } catch (err) {
+  //       setError('Failed to fetch managers');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchManagers();
-  }, []);
+  //   fetchManagers();
+  // }, []);
 
   const validationSchema = Yup.object({
     employeeId: Yup.string().required('Employee ID is required'),
@@ -134,7 +139,7 @@ const AddEmployee = ({ onCancel }) => {
       formData.append('phoneNum', values.phoneNum);
       formData.append('email', values.email);
       formData.append('officeAddress', values.officeAddress);
-      formData.append('managerId', values.managerId);
+      formData.append('managerId', 1);
       formData.append('profilePic', values.profilePic);
       console.log(formData)
       try {
@@ -282,8 +287,19 @@ const AddEmployee = ({ onCancel }) => {
           ) : null}
         </div>
 
-
         <div className="mb-4">
+          <label htmlFor="lastName" className="block text-gray-700">
+            Manager
+          </label>
+          <input
+            type="text"
+            id="mangerId"
+            className="w-full px-3 py-2 border-gray border rounded-md bg-white text-black"
+            value={manager}
+            readOnly
+          />
+        </div>
+        {/* <div className="mb-4">
           <label htmlFor="managerId" className="block text-gray-700">
             Manager ID
           </label>
@@ -309,7 +325,7 @@ const AddEmployee = ({ onCancel }) => {
           {formik.touched.managerId && formik.errors.managerId ? (
             <div className="text-red-500 text-sm">{formik.errors.managerId}</div>
           ) : null}
-        </div>
+        </div> */}
 
         <div className="mb-4">
           <label htmlFor="profilePic" className="block text-gray-700">
@@ -473,8 +489,14 @@ const ViewEmployee = ({ employee, onCancel }) => {
 };
 
 const Home = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.fromLogin) {
+      toast.success('Welcome to the secured home page!');
+    }
+  }, [location]);
   const [isAddingEmployee, setIsAddingEmployee] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState(null); // New state for selected employee
+  const [selectedEmployee, setSelectedEmployee] = useState(null); 
 
   return (
     <div className="p-6">

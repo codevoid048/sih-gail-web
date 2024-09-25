@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 const Login = () => {
@@ -19,38 +19,43 @@ const Login = () => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        // Make a POST request to the API
         const response = await fetch('https://attandance-backend-sih.onrender.com/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email: values.username,  // Assuming 'email' is used for username in the API
+            email: values.username,
             password: values.password
           }),
         });
 
         if (response.ok) {
           const data = await response.json();
-          // Handle successful login, for example, navigate to home page
+          const userDetails = {
+            username: values.username,
+            token: data.token,
+          };
+          localStorage.setItem('user', JSON.stringify(userDetails));
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('role', data.user.role);
+          localStorage.setItem('managerName', data.user.name);
+          localStorage.setItem('managerId', data.user.managerId);
+          toast.success('Login Successful!');
           navigate('/secured/home');
         } else {
-          // Handle error response
-          alert('Invalid credentials');
+          toast.error('Invalid credentials');
         }
       } catch (error) {
         console.error('Error during login:', error);
-        alert('Something went wrong. Please try again later.');
+        toast.error('Something went wrong. Please try again later.');
       }
     }
   });
 
   return (
     <div className="flex items-center justify-center w-screen h-screen bg-gray-300">
-      {/* Main container: Grid layout with two columns */}
       <div className="flex w-3/4 h-4/5 shadow-lg rounded-lg border-2 border-gray-400 overflow-hidden">
-        {/* Left Side: Image */}
         <div className="w-2/3 border-r border-gray-400">
           <img
             src="https://wallpapercave.com/wp/wp9764031.jpg"
@@ -59,7 +64,6 @@ const Login = () => {
           />
         </div>
 
-        {/* Right Side: Login Form */}
         <div className="w-1/3 flex flex-col justify-center items-center p-8 bg-gradient-to-r from-gray-100 to-white rounded-lg shadow-2xl">
           <form onSubmit={formik.handleSubmit} className="w-full max-w-xs">
             <h2 className="text-3xl font-bold mb-6 text-black text-center">Login</h2>
@@ -71,6 +75,7 @@ const Login = () => {
                 id="username"
                 name="username"
                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autoComplete="username" 
                 onChange={formik.handleChange}
                 value={formik.values.username}
               />
@@ -86,6 +91,7 @@ const Login = () => {
                 id="password"
                 name="password"
                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autoComplete="current-password"
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
